@@ -1,0 +1,27 @@
+.Toolbar {
+    align-items: center;
+    background-color: #00909e;
+    box-sizing: border-box;
+    display: flex;
+    height: 48px;
+    justify-content: space-between;
+    padding: 0 30px;
+    position: relative;
+    width: 100%;
+
+}
+
+.Logo {
+    display: flex;
+    width: 50%;
+}
+
+.Logo img {
+    height: 60px;
+}
+
+.Buttons {
+    display: flex;
+    justify-content: flex-end;
+    width: 50%;
+}
