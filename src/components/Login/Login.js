@@ -4,12 +4,18 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import './Login.css';
 import Key from './Key';
-
+import Button from 'react-bootstrap/Button';
 
 class Login extends Component {
 
     state = {
-        url: ''
+        url: '',
+        session: {
+            token: '',
+            id: ''
+        },
+        error: '',
+        expirationTime: 3600
     }
 
     setURL = param => {
@@ -19,12 +25,24 @@ class Login extends Component {
         this.setState({url: param === 'login' ? login : register});
     }
 
+    logout = () => {
+        console.log(this.state.session.token);
+        setTimeout(() => {
+            this.setState({session: {token: 'empty', id: 'empty'}});
+            console.log(this.state.session.token);
+        }, this.state.expirationTime * 1);
+    }
+
     render() {
-        return (
+        return (     
             <Formik
                 initialValues={{ email: "", password: "", returnSecureToken: true }}
                 onSubmit={async values => {
-                    axios.post(this.state.url, values);
+                    axios.post(this.state.url, values).then(response => {
+                        const session = {token: response.data.idToken, id: response.data.localId};
+                        this.setState({session: session});
+                        this.logout();
+                    }).catch(err => this.setState({error: err.response.data.error.message}));
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string().email().required("Required"),
@@ -42,7 +60,9 @@ class Login extends Component {
                         handleSubmit
                         } = props;
                 return (
+                    
                     <form onSubmit={handleSubmit}>
+                        <p>{this.state.error}</p>
                     <input
                     id="email"
                     placeholder="Enter your email"
@@ -78,13 +98,13 @@ class Login extends Component {
                     <div className="input-feedback">{errors.password}</div>
                     )}
         
-                    <button type="submit" onClick={() => this.setURL('login')} disabled={isSubmitting}>
+                    <Button variant="outline-info" type="submit" onClick={() => this.setURL('login')} disabled={isSubmitting}>
                     Login
-                    </button>
+                    </Button>
 
-                    <button type="submit" onClick={() => this.setURL('register')} disabled={isSubmitting}>
+                    <Button variant="outline-info" type="submit" onClick={() => this.setURL('register')} disabled={isSubmitting}>
                     Register
-                    </button>
+                    </Button>
  
                 </form>
         );

@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
 
 import Toolbar from './components/Nav/Toolbar/Toolbar';
-import List from './components/List/List';
+import List from './containers/List/List';
 import Statistics from './components/Statistics/Statistics';
 import Login from './components/Login/Login';
 
