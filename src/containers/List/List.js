@@ -6,8 +6,6 @@ import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import ListEntry from '../ListEntry/ListEntry';
-
 
 class List extends Component {
 
