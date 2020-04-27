@@ -1,7 +1,7 @@
 import React from 'react';
 
 import classes from './Toolbar.module.css';
-import bookLogo from '../../../assets/images/b2.png';
+import bookLogo from '../../../assets/images/logo.png';
 
 import Button from 'react-bootstrap/Button';
 
