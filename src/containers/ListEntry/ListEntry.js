@@ -14,10 +14,6 @@ class ListEntry extends Component {
         this.setState({displayEntry: !this.state.displayEntry});
     }
 
-    entryForm = () => {
-        return <hi>list entry</hi>
-    }
-
     render() {
         return (
             <div>   
@@ -27,6 +23,7 @@ class ListEntry extends Component {
                 initialValues={{ title: "", creator: "", year: "", rating: "", type: ""}}
                 onSubmit={async values => {
                     await axios.post('https://allmedialog.firebaseio.com/example.json', values);
+                    this.setState({update: true});
                 }}
                 validationSchema={Yup.object().shape({
                     title: Yup.string().required("Required"),
