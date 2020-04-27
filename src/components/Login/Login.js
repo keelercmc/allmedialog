@@ -30,7 +30,7 @@ class Login extends Component {
         setTimeout(() => {
             this.setState({session: {token: 'empty', id: 'empty'}});
             console.log(this.state.session.token);
-        }, this.state.expirationTime * 1);
+        }, this.state.expirationTime * 1000);
     }
 
     render() {

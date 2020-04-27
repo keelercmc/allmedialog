@@ -9,14 +9,39 @@ class List extends Component {
         creator: 'author',
         year: 'year',
         rating: 'rating',
-        type: 'type'
+        type: 'type',
+        list: []
+    }
+
+    componentDidMount = () => {
+        this.updateList();
+    }
+
+    updateList = async () => {
+        await axios.get('https://allmedialog.firebaseio.com/example.json').then(response => {
+            const list = Object.keys(response.data).map(keyName => response.data[keyName]);
+            this.setState({list: list});
+            this.renderList();
+        });
+    }
+
+    renderList = () => {
+        const list = this.state.list.map((list) =>
+            <div>
+                <li>{list.title}</li>
+            </div>
+            
+        );
+        return (
+            <ul>{list}</ul>
+        );
     }
 
     render() {
         return (
             <div>
                 <ListEntry/>
-                <h1>{this.state.title}, {this.state.creator}, {this.state.year}, {this.state.rating}, {this.state.type}</h1>
+                {this.renderList()}
             </div>
         );
     }
