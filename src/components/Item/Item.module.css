@@ -1,7 +1,15 @@
 .Item {
+    border: 0.5px solid #000;
+    display: block;
     list-style: none;
+    width: 67%;
 }
 
-.Button {
-    border-radius: 5px;
+.Buttons {
+    display: block;
+    text-align: right;
+}
+
+h1 {
+    text-align: left;
 }

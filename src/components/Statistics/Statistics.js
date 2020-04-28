@@ -1,7 +1,7 @@
 import React from 'react';
 
 const statistics = (props) => (
-    <div>the statistics are here</div>
+    <div>{props.list[0].score}</div>
 );
 
 export default statistics;

@@ -6,12 +6,17 @@ import axios from 'axios';
 
 import Item from '../../components/Item/Item';
 import ListEntry from '../../components/ListEntry/ListEntry';
+import Statistics from '../../components/Statistics/Statistics';
+import UpdateForm from '../../components/UpdateForm/UpdateForm';
 
 
 class List extends Component {
 
     state = {
         hideEntryForm: true,
+        hideStats: true,
+        hideUpdateForm: true,
+        targetIndex: null,
         list: [{
             creator: '',
             index: 0,
@@ -21,36 +26,37 @@ class List extends Component {
             type: '',
             year: 0
         }],
-        stats: {
-            average: 0,
-            averageAnime: 0,
-            averageBooks: 0,
-            averageGames: 0,
-            averageMovies: 0,
-            total: 0,
-            totalAnime: 0,
-            totalBooks: 0,
-            totalGames: 0,
-            totalMovies: 0
-        }
+        keys: []
     }
 
     componentDidMount = () => {
         this.updateList();
     }
 
-    toggleEntryForm = () => {
-        this.setState({hideEntryForm: !this.state.hideEntryForm});
+    toggleForm = (param, index) => {
+        if (index) {
+            if (index === this.state.targetIndex) {
+                index = 0;
+            }
+            this.setState({[param]: !this.state[param], targetIndex: index});
+        }
+        else {
+            this.setState({[param]: !this.state[param]});
+        }
     }
 
-    addItem = async param => {
-        await axios.post('https://allmedialog.firebaseio.com/example.json', param);
+    addItem = async value => {
+        await axios.post('https://allmedialog.firebaseio.com/example.json', value);
         this.updateList();
     }
 
     removeItem = async index => {
         await axios.delete('https://allmedialog.firebaseio.com/example/' + this.state.keys[index-1] + '.json');
         this.updateList();
+    }
+
+    updateItem = async index => {
+        return;
     }
 
     updateList = async () => {
@@ -62,48 +68,25 @@ class List extends Component {
         });
     }
 
-    calculateStatistics = async () => {
-        const stats = {
-            average: 0,
-            averageAnime: 0,
-            averageBooks: 0,
-            averageGames: 0,
-            averageMovies: 0,
-            test: 0,
-            total: this.state.list.length,
-            totalAnime: 0,
-            totalBooks: 0,
-            totalGames: 0,
-            totalMovies: 0
-        }
-
-        this.state.list.forEach(item => {
-            stats.test += Number(item.score);
-        })
-        stats.average = stats.test / this.state.list.length;
-        await this.setState({stats: stats});
-        console.log(this.state.stats);
-    }
-
     renderList = () => {
         let counter = 0;
         this.state.list.forEach(item => {
             item.index = ++counter;
-            item.style = this.findColor(item.type);
+            item.style = this.findStyle(item.type);
         });
 
         const list = this.state.list.map((list) => 
             <div>
-                <h6>#</h6>
                 <Item 
                     title={list.title} creator={list.creator} year={list.year} score={list.score} type={list.type}
-                    index={list.index} key={list.index} style={list.style} remove={this.removeItem}/>
+                    index={list.index} key={list.index} style={list.style} hideForm={this.state.hideUpdateForm}
+                    target={this.state.targetIndex} remove={this.removeItem} toggleForm={this.toggleForm}/>
             </div>
             );
         return (<div><ul>{list}</ul></div>);
     }
 
-    findColor = type => {
+    findStyle = type => {
         let color;
         switch (type) {
             case 'Anime':
@@ -128,11 +111,15 @@ class List extends Component {
     render() {
         return (
             <div>
-                <Button variant='outline-info' onClick={this.toggleEntryForm}>New</Button>
-                <Button variant='outline-info' onClick={this.calculateStatistics}>Statistics</Button>
+                <Button variant='outline-info' onClick={() => this.toggleForm('hideEntryForm')}>New</Button>
+                <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>
                 
                 {this.state.hideEntryForm ? null : 
                     <ListEntry add={this.addItem} update={this.updateList}/>
+                }
+
+                {this.state.hideStats ? null : 
+                    <Statistics list={this.state.list}/>
                 }
 
                 {this.renderList()}

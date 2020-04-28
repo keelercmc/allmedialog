@@ -9,9 +9,10 @@ const listEntry = (props) => {
     return (
         <Formik
             initialValues={{ title: '', creator: '', year: '', score: '', type: ''}}
-            onSubmit={async values => {
+            onSubmit={async (values, {resetForm}) => {
                 await props.add(values);
                 props.update();
+                resetForm();
             }}
             validationSchema={Yup.object().shape({
                 title: Yup.string().required('Required'),
