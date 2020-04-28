@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-const formEntry = (props) => {
+const listEntry = (props) => {
     return (
         <Formik
             initialValues={{ title: '', creator: '', year: '', score: '', type: ''}}
@@ -46,7 +46,7 @@ const formEntry = (props) => {
 
                         <input
                             id='creator'
-                            placeholder='Creator'
+                            placeholder='Author, creator, studio'
                             type='creator'
                             value={values.creator}
                             onChange={handleChange}
@@ -57,7 +57,7 @@ const formEntry = (props) => {
 
                         <input
                             id='year'
-                            placeholder='Year'
+                            placeholder='Year completed'
                             type='year'
                             value={values.year}
                             onChange={handleChange}
@@ -68,7 +68,7 @@ const formEntry = (props) => {
 
                         <input
                             id='score'
-                            placeholder='Score'
+                            placeholder='Score (out of 10)'
                             type='score'
                             value={values.score}
                             onChange={handleChange}
@@ -102,4 +102,4 @@ const formEntry = (props) => {
     );
 }
 
-export default formEntry;
+export default listEntry;

@@ -1,6 +1,5 @@
 import React, {Component } from 'react';
 
-import './Login.css';
 import Button from 'react-bootstrap/Button';
 
 import axios from 'axios';
@@ -65,7 +64,6 @@ class Login extends Component {
                         <form onSubmit={handleSubmit}>
 
                             <p>{this.state.errorMessage}</p>
-
                             <input
                                 id='email'
                                 placeholder='Enter your email'
@@ -76,7 +74,6 @@ class Login extends Component {
                                 className={errors.email && touched.email ? 'text-input error' : 'text-input'}
                             />
                             {errors.email && touched.email && (<div className='input-feedback'>{errors.email}</div>)}
-
                             <input
                                 id='password'
                                 placeholder='Enter your password'
