@@ -34,6 +34,16 @@ class Login extends Component {
         }, this.state.expirationTime * 1000);
     }
 
+    errorMap = error => {
+        if (error.includes('Required'))
+            error = 'Required.';
+        if (error.includes('valid'))
+            error = 'Email must be valid.';
+        if (error.includes('characters'))
+            error = 'Password must contain 8 or more characters.';
+        return error;
+    }
+
     render() {
         return (     
             <Formik
@@ -73,7 +83,7 @@ class Login extends Component {
                                 onBlur={handleBlur}
                                 className={errors.email && touched.email ? 'text-input error' : 'text-input'}
                             />
-                            {errors.email && touched.email && (<div className='input-feedback'>{errors.email}</div>)}
+                            {errors.email && touched.email && (<div className='input-feedback'>{this.errorMap(errors.email)}</div>)}
                             <input
                                 id='password'
                                 placeholder='Enter your password'
@@ -83,7 +93,7 @@ class Login extends Component {
                                 onBlur={handleBlur}
                                 className={errors.password && touched.password ? 'text-input error' : 'text-input'}
                             />
-                            {errors.password && touched.password && (<div className='input-feedback'>{errors.password}</div>)}
+                            {errors.password && touched.password && (<div className='input-feedback'>{this.errorMap(errors.password)}</div>)}
             
                             <Button variant='outline-info' type='submit' onClick={() => this.setURL('login')} disabled={isSubmitting}>
                                 Login

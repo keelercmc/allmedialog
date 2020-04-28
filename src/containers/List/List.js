@@ -7,7 +7,6 @@ import axios from 'axios';
 import Item from '../../components/Item/Item';
 import ListEntry from '../../components/ListEntry/ListEntry';
 import Statistics from '../../components/Statistics/Statistics';
-import UpdateForm from '../../components/UpdateForm/UpdateForm';
 
 
 class List extends Component {
@@ -68,6 +67,14 @@ class List extends Component {
         });
     }
 
+    sortList = filter => {
+        console.log(this.state.list);
+        const sortedList = [].concat(this.state.list);
+        sortedList.sort((a, b) => a[filter] > b[filter] ? 1 : -1);
+        console.log(sortedList);
+        this.setState({list: sortedList});
+    }
+
     renderList = () => {
         let counter = 0;
         this.state.list.forEach(item => {
@@ -113,6 +120,7 @@ class List extends Component {
             <div>
                 <Button variant='outline-info' onClick={() => this.toggleForm('hideEntryForm')}>New</Button>
                 <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>
+                <Button variant='outline-info' onClick={() => this.sortList('creator')}>Sort by title</Button>
                 
                 {this.state.hideEntryForm ? null : 
                     <ListEntry add={this.addItem} update={this.updateList}/>

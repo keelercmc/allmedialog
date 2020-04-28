@@ -5,6 +5,14 @@ import Button from 'react-bootstrap/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+const errorMap = error => {
+    if (error.includes('Required'))
+        error = 'Required.';
+    if (error.includes('NaN'))
+        error = 'Please enter a number.';
+    return error;
+}
+
 const listEntry = (props) => {
     return (
         <Formik
@@ -43,7 +51,7 @@ const listEntry = (props) => {
                             onBlur={handleBlur}
                             className={errors.title && touched.title ? 'text-input error' : 'text-input'}
                         />
-                        {errors.title && touched.title && (<div className='input-feedback'>{errors.title}</div>)}
+                        {errors.title && touched.title && (<div className='input-feedback'>{errorMap(errors.title)}</div>)}
 
                         <input
                             id='creator'
@@ -54,7 +62,7 @@ const listEntry = (props) => {
                             onBlur={handleBlur}
                             className={errors.creator && touched.creator ? 'text-input error' : 'text-input'}
                         />
-                        {errors.creator && touched.creator && (<div className='input-feedback'>{errors.creator}</div>)}
+                        {errors.creator && touched.creator && (<div className='input-feedback'>{errorMap(errors.creator)}</div>)}
 
                         <input
                             id='year'
@@ -65,7 +73,7 @@ const listEntry = (props) => {
                             onBlur={handleBlur}
                             className={errors.year && touched.year ? 'text-input error' : 'text-input'}
                         />
-                        {errors.year && touched.year && (<div className='input-feedback'>{errors.year}</div>)}
+                        {errors.year && touched.year && (<div className='input-feedback'>{errorMap(errors.year)}</div>)}
 
                         <input
                             id='score'
@@ -76,7 +84,7 @@ const listEntry = (props) => {
                             onBlur={handleBlur}
                             className={errors.score && touched.score ? 'text-input error' : 'text-input'}
                         />
-                        {errors.score && touched.score && (<div className='input-feedback'>{errors.score}</div>)}
+                        {errors.score && touched.score && (<div className='input-feedback'>{errorMap(errors.score)}</div>)}
 
                         <select
                             name='type'
@@ -91,7 +99,7 @@ const listEntry = (props) => {
                             <option value='Game' label='Game'/>
                             <option value='Movie' label='Movie'/>
                         </select>
-                        {errors.type && touched.type && (<div className='input-feedback'>{errors.type}</div>)}
+                        {errors.type && touched.type && (<div className='input-feedback'>{errorMap(errors.type)}</div>)}
     
                         <Button variant='outline-info' type='submit' disabled={isSubmitting}>
                             Add
