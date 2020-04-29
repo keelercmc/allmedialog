@@ -68,10 +68,13 @@ class List extends Component {
     }
 
     sortList = filter => {
-        console.log(this.state.list);
         const sortedList = [].concat(this.state.list);
-        sortedList.sort((a, b) => a[filter] > b[filter] ? 1 : -1);
-        console.log(sortedList);
+
+        if (filter.target.value === 'score') 
+            sortedList.sort((a, b) => a[filter.target.value] < b[filter.target.value] ? 1 : -1);
+        else 
+            sortedList.sort((a, b) => a[filter.target.value] > b[filter.target.value] ? 1 : -1);
+
         this.setState({list: sortedList});
     }
 
@@ -120,7 +123,14 @@ class List extends Component {
             <div>
                 <Button variant='outline-info' onClick={() => this.toggleForm('hideEntryForm')}>New</Button>
                 <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>
-                <Button variant='outline-info' onClick={() => this.sortList('creator')}>Sort by title</Button>
+
+                <select onChange={this.sortList}>
+                    <option value='title'>Title</option>
+                    <option value='creator'>Creator</option>
+                    <option value='year'>Year</option>
+                    <option value='score'>Score</option>
+                    <option value='type'>Type</option>
+                </select>
                 
                 {this.state.hideEntryForm ? null : 
                     <ListEntry add={this.addItem} update={this.updateList}/>
