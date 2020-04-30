@@ -1,5 +1,7 @@
 import React from 'react';
 
+import classes from './Statistics.module.css';
+
 
 const statistics = (props) => {
 
@@ -49,17 +51,17 @@ const statistics = (props) => {
     }
 
     return (
-        <div>
+        <div className={classes.Statistics}>
             <p>Total entries: {calculateTotalOfType()}</p>
-            <p>Total Anime: {calculateTotalOfType('Anime')}</p>
-            <p>Total Books: {calculateTotalOfType('Book')}</p>
-            <p>Total Games: {calculateTotalOfType('Game')}</p>
-            <p>Total Movies: {calculateTotalOfType('Movie')}</p>
+            <p>Total anime: {calculateTotalOfType('Anime')}</p>
+            <p>Total books: {calculateTotalOfType('Book')}</p>
+            <p>Total games: {calculateTotalOfType('Game')}</p>
+            <p>Total movies: {calculateTotalOfType('Movie')}</p>
             <p>Average of all entries: {calculateAverageOfType()}</p>
-            <p>Average of Anime: {calculateAverageOfType('Anime')}</p>
-            <p>Average of Books: {calculateAverageOfType('Book')}</p>
-            <p>Average of Games: {calculateAverageOfType('Game')}</p>
-            <p>Average of Movies: {calculateAverageOfType('Movie')}</p>
+            <p>Average of anime: {calculateAverageOfType('Anime')}</p>
+            <p>Average of books: {calculateAverageOfType('Book')}</p>
+            <p>Average of games: {calculateAverageOfType('Game')}</p>
+            <p>Average of movies: {calculateAverageOfType('Movie')}</p>
         </div>
     );
     

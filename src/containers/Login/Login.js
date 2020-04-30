@@ -81,7 +81,7 @@ class Login extends Component {
                                 value={values.email}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                className={errors.email && touched.email ? 'text-input error' : 'text-input'}
+                                className={errors.email && touched.email ? 'text-input LoginInput error' : ('text-input LoginInput')}
                             />
                             {errors.email && touched.email && (<div className='input-feedback'>{this.errorMap(errors.email)}</div>)}
                             <input
@@ -91,7 +91,7 @@ class Login extends Component {
                                 value={values.password}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                className={errors.password && touched.password ? 'text-input error' : 'text-input'}
+                                className={errors.password && touched.password ? 'text-input LoginInput error' : 'text-input LoginInput'}
                             />
                             {errors.password && touched.password && (<div className='input-feedback'>{this.errorMap(errors.password)}</div>)}
             

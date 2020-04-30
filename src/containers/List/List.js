@@ -7,6 +7,7 @@ import axios from 'axios';
 import Item from '../../components/Item/Item';
 import ListEntry from '../../components/ListEntry/ListEntry';
 import Statistics from '../../components/Statistics/Statistics';
+import Login from '../Login/Login';
 
 
 class List extends Component {
@@ -15,6 +16,7 @@ class List extends Component {
         hideEntryForm: true,
         hideStats: true,
         hideUpdateForm: true,
+        hideTestLogin: true,
         targetIndex: null,
         list: [{
             creator: '',
@@ -124,7 +126,7 @@ class List extends Component {
                 <Button variant='outline-info' onClick={() => this.toggleForm('hideEntryForm')}>New</Button>
                 <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>
 
-                <select onChange={this.sortList}>
+                <select className='SortSelect' onChange={this.sortList}>
                     <option value='title'>Title</option>
                     <option value='creator'>Creator</option>
                     <option value='year'>Year</option>
@@ -141,6 +143,12 @@ class List extends Component {
                 }
 
                 {this.renderList()}
+
+                <Button variant='outline-info' onClick={() => this.toggleForm('hideTestLogin')}>Login 2</Button>
+
+                {this.state.hideTestLogin ? null : 
+                    <Login/>
+                }
             </div>
         );
     }
