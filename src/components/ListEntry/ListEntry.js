@@ -2,6 +2,8 @@ import React from 'react';
 
 import Button from 'react-bootstrap/Button';
 
+import classes from './ListEntry.module.css';
+
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -12,6 +14,8 @@ const errorMap = error => {
         error = 'Please enter a number.';
     return error;
 }
+
+
 
 const listEntry = (props) => {
     return (
@@ -89,21 +93,22 @@ const listEntry = (props) => {
                         <select
                             name='type'
                             value={values.type}
-                            onChange={handleChange}
+                            onChange={(e) => {handleChange(e); e.target.style.color = '#000'}}
                             onBlur={handleBlur}
-                            className={errors.type && touched.type ? 'text-input error' : 'text-input'}
+                            className={errors.type && touched.type ? 'text-input error' : 'text-input', touched.type && !errors.type ? classes.MediaSelectTouched : classes.MediaSelect}
                         >
-                            <option value='' label='Select a type'/>
+                            <option selected disabled value='' label='Select a type'/>
                             <option value='Anime' label='Anime'/>
                             <option value='Book' label='Book'/>
                             <option value='Game' label='Game'/>
                             <option value='Movie' label='Movie'/>
                         </select>
                         {errors.type && touched.type && (<div className='input-feedback'>{errorMap(errors.type)}</div>)}
-    
-                        <Button variant='outline-info' type='submit' disabled={isSubmitting}>
-                            Add
-                        </Button>
+                        <div className={classes.AddButton}>
+                            <Button variant='outline-info' type='submit' disabled={isSubmitting}>
+                                Add Item
+                            </Button>
+                        </div>
                     </form>
                 );
              }}

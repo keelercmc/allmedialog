@@ -29,6 +29,10 @@ input.error {
   margin: 0 auto;
 }
 
+ul {
+  padding: 0 10%;
+}
+
 li {
   font-size: 20px;
   text-align: left;
@@ -38,8 +42,15 @@ select {
   border: 1px solid #ccc;
   border-radius: 10px;
   display: block;
-  padding: .5rem;
+  padding: 0.55rem 0 0.55rem 0.3rem;
   width: 20%;
+}
+
+option {
+  color: #000;
+}
+option:first-child {
+  color: #636c72;
 }
 
 .SortSelect {

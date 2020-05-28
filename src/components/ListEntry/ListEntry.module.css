@@ -1,0 +1,15 @@
+.AddButton {
+    margin-bottom: 2%;
+    margin-left: 5%;
+    margin-top: 0.75%;
+    text-align: left;
+}
+
+.MediaSelect {
+    color: #636c72;
+}
+
+.MediaSelectTouched {
+    color: #000;
+}
+
