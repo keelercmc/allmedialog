@@ -8,6 +8,7 @@ import Item from '../../components/Item/Item';
 import ListEntry from '../../components/ListEntry/ListEntry';
 import Statistics from '../../components/Statistics/Statistics';
 import Login from '../Login/Login';
+import AuthContext from '../../context/auth-context';
 
 
 class List extends Component {
@@ -30,8 +31,14 @@ class List extends Component {
         keys: []
     }
 
+    static contextType = AuthContext;
+
     componentDidMount = () => {
         this.updateList();
+    }
+
+    componentDidUpdate = () => {
+        this.test();
     }
 
     toggleForm = (param, index) => {
@@ -120,6 +127,10 @@ class List extends Component {
         return color;
     }
 
+    test = async () => {
+        console.log(await axios.get('https://allmedialog.firebaseio.com/' + this.context.id + '.json'));
+    }
+
     render() {
         return (
             <div>
@@ -149,6 +160,8 @@ class List extends Component {
                 {this.state.hideTestLogin ? null : 
                     <Login/>
                 }
+
+                {this.context.authenticated ? <h1>logged in</h1> : null}
             </div>
         );
     }

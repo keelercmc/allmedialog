@@ -6,6 +6,8 @@ import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+import AuthContext from '../../context/auth-context';
+
 import Key from './Key';
 
 
@@ -14,12 +16,15 @@ class Login extends Component {
     state = {
         url: '',
         session: {
+            email: '',
             token: '',
             id: ''
         },
         expirationTime: 3600,
         errorMessage: ''
     }
+
+    static contextType = AuthContext;
 
     setURL = param => {
         const loginURL = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + Key;
@@ -28,13 +33,23 @@ class Login extends Component {
         this.setState({url: param === 'login' ? loginURL : registerURL});
     }
 
-    setLogoutTimer = () => {
+    login = (res) => {
+        this.context.authenticated = true;
+        this.context.id = res.localId;
+        const session = {authenticated: this.context.authenticated, email: res.email, token: res.idToken, id: res.localId};;
+        axios.post('https://allmedialog.firebaseio.com/' + res.localId + '.json', session);
+        this.setState({session: session});
+        this.logout(res);
+    }
+
+    logout = (res) => {
         setTimeout(() => {
-            this.setState({session: {token: '', id: ''}});
+            axios.delete('https://allmedialog.firebaseio.com/' + res.localId + '.json');
+            this.setState({session: {email: '', token: '', id: ''}});
         }, this.state.expirationTime * 1000);
     }
 
-    errorMap = error => {
+    errorHandler = error => {
         if (error.includes('Required'))
             error = 'Required.';
         if (error.includes('valid'))
@@ -45,15 +60,13 @@ class Login extends Component {
     }
 
     render() {
-        return (     
+        return (  
             <Formik
                 initialValues={{ email: '', password: '', returnSecureToken: true }}
-                onSubmit={async values => {
-                    axios.post(this.state.url, values).then(response => {
-                        const session = {token: response.data.idToken, id: response.data.localId};
-                        this.setState({session: session});
-                        this.setLogoutTimer();
-                    }).catch(err => this.setState({errorMessage: err.response.data.error.message}));
+                onSubmit={async values => { 
+                    axios.post(this.state.url, values)
+                    .then(response => response.status === 200 ? this.login(response.data) : null)
+                    .catch(err => this.setState({errorMessage: err.response.data.error.message}));
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string().email().required('Required'),
@@ -83,7 +96,7 @@ class Login extends Component {
                                 onBlur={handleBlur}
                                 className={errors.email && touched.email ? 'text-input LoginInput error' : ('text-input LoginInput')}
                             />
-                            {errors.email && touched.email && (<div className='input-feedback'>{this.errorMap(errors.email)}</div>)}
+                            {errors.email && touched.email && (<div className='input-feedback'>{this.errorHandler(errors.email)}</div>)}
                             <input
                                 id='password'
                                 placeholder='Enter your password'
@@ -93,7 +106,7 @@ class Login extends Component {
                                 onBlur={handleBlur}
                                 className={errors.password && touched.password ? 'text-input LoginInput error' : 'text-input LoginInput'}
                             />
-                            {errors.password && touched.password && (<div className='input-feedback'>{this.errorMap(errors.password)}</div>)}
+                            {errors.password && touched.password && (<div className='input-feedback'>{this.errorHandler(errors.password)}</div>)}
             
                             <Button variant='outline-info' type='submit' onClick={() => this.setURL('login')} disabled={isSubmitting}>
                                 Login
@@ -105,7 +118,7 @@ class Login extends Component {
                         </form>
                     );
                 }}
-            </Formik>
+            </Formik> 
         );
     }
 }
