@@ -15,12 +15,6 @@ class Login extends Component {
 
     state = {
         url: '',
-        session: {
-            email: '',
-            token: '',
-            id: ''
-        },
-        expirationTime: 3600,
         errorMessage: ''
     }
 
@@ -31,22 +25,6 @@ class Login extends Component {
         const registerURL = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + Key;
    
         this.setState({url: param === 'login' ? loginURL : registerURL});
-    }
-
-    login = (res) => {
-        this.context.authenticated = true;
-        this.context.id = res.localId;
-        const session = {authenticated: this.context.authenticated, email: res.email, token: res.idToken, id: res.localId};;
-        axios.post('https://allmedialog.firebaseio.com/' + res.localId + '.json', session);
-        this.setState({session: session});
-        this.logout(res);
-    }
-
-    logout = (res) => {
-        setTimeout(() => {
-            axios.delete('https://allmedialog.firebaseio.com/' + res.localId + '.json');
-            this.setState({session: {email: '', token: '', id: ''}});
-        }, this.state.expirationTime * 1000);
     }
 
     errorHandler = error => {
@@ -65,8 +43,8 @@ class Login extends Component {
                 initialValues={{ email: '', password: '', returnSecureToken: true }}
                 onSubmit={async values => { 
                     axios.post(this.state.url, values)
-                    .then(response => response.status === 200 ? this.login(response.data) : null)
-                    .catch(err => this.setState({errorMessage: err.response.data.error.message}));
+                    .then(response => response.status === 200 ? this.props.login(response.data) : null) 
+                    .catch(err => err.response.data ? this.setState({errorMessage: err.response.data.error.message}):null);
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string().email().required('Required'),

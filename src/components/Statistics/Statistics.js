@@ -47,24 +47,27 @@ const statistics = (props) => {
         })
 
         const average = (sumOfRatings / numOfRatings).toFixed(2);
-        return (average === 'Infinity' ? 'N/A' : average);
+        return (average === 'Infinity' || average === 'NaN' ? 'N/A' : average);
     }
-
-    return (
-        <div className={classes.Statistics}>
-            <p>Total entries: {calculateTotalOfType()}</p>
-            <p>Total anime: {calculateTotalOfType('Anime')}</p>
-            <p>Total books: {calculateTotalOfType('Book')}</p>
-            <p>Total games: {calculateTotalOfType('Game')}</p>
-            <p>Total movies: {calculateTotalOfType('Movie')}</p>
-            <p>Average of all entries: {calculateAverageOfType()}</p>
-            <p>Average of anime: {calculateAverageOfType('Anime')}</p>
-            <p>Average of books: {calculateAverageOfType('Book')}</p>
-            <p>Average of games: {calculateAverageOfType('Game')}</p>
-            <p>Average of movies: {calculateAverageOfType('Movie')}</p>
-        </div>
+    if (props.list) {
+        return (
+            <div className={classes.Statistics}>
+                <p>Total entries: {calculateTotalOfType()}</p>
+                <p>Total anime: {calculateTotalOfType('Anime')}</p>
+                <p>Total books: {calculateTotalOfType('Book')}</p>
+                <p>Total games: {calculateTotalOfType('Game')}</p>
+                <p>Total movies: {calculateTotalOfType('Movie')}</p>
+                <p>Average of all entries: {calculateAverageOfType()}</p>
+                <p>Average of anime: {calculateAverageOfType('Anime')}</p>
+                <p>Average of books: {calculateAverageOfType('Book')}</p>
+                <p>Average of games: {calculateAverageOfType('Game')}</p>
+                <p>Average of movies: {calculateAverageOfType('Movie')}</p>
+            </div>
+        );
+    }
+    else return (
+        <div>no stats available</div>
     );
-    
 }
 
 export default statistics;

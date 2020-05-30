@@ -14,31 +14,22 @@ import AuthContext from '../../context/auth-context';
 class List extends Component {
 
     state = {
+        authenticated: false,
+        name: null,
         hideEntryForm: true,
         hideStats: true,
         hideUpdateForm: true,
-        hideTestLogin: true,
         targetIndex: null,
-        list: [{
-            creator: '',
-            index: 0,
-            score: 0,
-            style: '',
-            title: '',
-            type: '',
-            year: 0
-        }],
-        keys: []
+        list: null,
+        keys: null,
+        logoutTimer: 3600000
     }
 
     static contextType = AuthContext;
 
     componentDidMount = () => {
         this.updateList();
-    }
-
-    componentDidUpdate = () => {
-        this.test();
+        this.updateLoginStatus();
     }
 
     toggleForm = (param, index) => {
@@ -54,25 +45,31 @@ class List extends Component {
     }
 
     addItem = async value => {
-        await axios.post('https://allmedialog.firebaseio.com/example.json', value);
+        await axios.post('https://allmedialog.firebaseio.com/' + this.state.name + '.json', value);
         this.updateList();
     }
 
     removeItem = async index => {
-        await axios.delete('https://allmedialog.firebaseio.com/example/' + this.state.keys[index-1] + '.json');
+        await axios.delete('https://allmedialog.firebaseio.com/' + this.state.name + '/' + this.state.keys[index-1] + '.json');
         this.updateList();
     }
 
     updateItem = async index => {
+        //get, delete, post
         return;
     }
 
     updateList = async () => {
-        await axios.get('https://allmedialog.firebaseio.com/example.json').then(response => {
-            const keys = Object.keys(response.data)
-            const list = keys.map(key => response.data[key]);
-            this.setState({list: list, keys: keys});
-            this.renderList();
+        await axios.get('https://allmedialog.firebaseio.com/' + this.state.name +'.json').then(response => {
+            if (response.data) {
+                const keys = Object.keys(response.data)
+                const list = keys.map(key => response.data[key]);
+                this.setState({list: list, keys: keys});
+                this.renderList();
+            }  
+            else {
+                this.setState({list: null, keys: null});
+            }
         });
     }
 
@@ -88,21 +85,22 @@ class List extends Component {
     }
 
     renderList = () => {
-        let counter = 0;
-        this.state.list.forEach(item => {
-            item.index = ++counter;
-            item.style = this.findStyle(item.type);
-        });
-
-        const list = this.state.list.map((list) => 
-            <div>
-                <Item 
-                    title={list.title} creator={list.creator} year={list.year} score={list.score} type={list.type}
-                    index={list.index} key={list.index} style={list.style} hideForm={this.state.hideUpdateForm}
-                    target={this.state.targetIndex} remove={this.removeItem} toggleForm={this.toggleForm}/>
-            </div>
-            );
-        return (<div><ul>{list}</ul></div>);
+        if (this.state.list) {
+            let counter = 0;
+            this.state.list.forEach(item => {
+                item.index = ++counter;
+                item.style = this.findStyle(item.type);
+            });
+            const list = this.state.list.map((list) => 
+                <div>
+                    <Item 
+                        title={list.title} creator={list.creator} year={list.year} score={list.score} type={list.type}
+                        index={list.index} key={list.index} style={list.style} hideForm={this.state.hideUpdateForm}
+                        target={this.state.targetIndex} remove={this.removeItem} toggleForm={this.toggleForm}/>
+                </div>
+                );
+            return (<div><ul>{list}</ul></div>);
+        }  
     }
 
     findStyle = type => {
@@ -127,41 +125,70 @@ class List extends Component {
         return color;
     }
 
-    test = async () => {
-        console.log(await axios.get('https://allmedialog.firebaseio.com/' + this.context.id + '.json'));
+    login = async (res) => {
+        this.context.authenticated = true;
+        this.context.id = res.localId;
+        this.context.name = res.email.slice(0, res.email.indexOf("@")) + 
+            '---' + res.email.slice(res.email.indexOf("@")+1, res.email.indexOf("."));
+        await axios.delete('https://allmedialog.firebaseio.com/login.json');
+        await axios.post('https://allmedialog.firebaseio.com/login.json', this.context);
+        this.updateLoginStatus();
+        this.logout(this.state.logoutTimer, res);
+    }
+
+    logout = (logoutTimer, res) => {
+        setTimeout(async () => {
+            await axios.delete('https://allmedialog.firebaseio.com/login.json');
+            this.context.authenticated = false;
+            this.context.id = '';
+            this.context.name = '';
+            this.updateLoginStatus();
+        }, logoutTimer);
+    }
+
+    updateLoginStatus = async () => {
+        await axios.get('https://allmedialog.firebaseio.com/login.json').then(response => {
+            if (response.data) {
+                const token = Object.keys(response.data).map(key => response.data[key]);
+                this.setState({authenticated: token[0].authenticated, name: token[0].name});
+                this.updateList();
+                this.logout(this.state.logoutTimer);
+            }
+            else {
+                this.setState({authenticated: false, name: ''});
+            }
+        });
     }
 
     render() {
         return (
             <div>
-                <Button variant='outline-info' onClick={() => this.toggleForm('hideEntryForm')}>New</Button>
-                <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>
+                {!this.state.authenticated ?
+                        <Login login={this.login}/>
+                    :<div>
+                        <Button variant='outline-info' onClick={() => this.logout(360)}>Logout</Button>
+                        <Button variant='outline-info' onClick={() => this.toggleForm('hideEntryForm')}>New</Button>
+                        <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>
 
-                <select className='SortSelect' onChange={this.sortList}>
-                    <option value='title'>Title</option>
-                    <option value='creator'>Creator</option>
-                    <option value='year'>Year</option>
-                    <option value='score'>Score</option>
-                    <option value='type'>Type</option>
-                </select>
-                
-                {this.state.hideEntryForm ? null : 
-                    <ListEntry add={this.addItem} update={this.updateList}/>
+                        <select className='SortSelect' onChange={this.sortList}>
+                        <option value='title'>Title</option>
+                        <option value='creator'>Creator</option>
+                        <option value='year'>Year</option>
+                        <option value='score'>Score</option>
+                        <option value='type'>Type</option>
+                        </select>
+
+                        {this.state.hideEntryForm ? null : 
+                            <ListEntry add={this.addItem} update={this.updateList}/>
+                        }
+
+                        {this.state.hideStats ? null : 
+                            <Statistics list={this.state.list}/>
+                        }
+
+                        {this.renderList()}
+                    </div>
                 }
-
-                {this.state.hideStats ? null : 
-                    <Statistics list={this.state.list}/>
-                }
-
-                {this.renderList()}
-
-                <Button variant='outline-info' onClick={() => this.toggleForm('hideTestLogin')}>Login 2</Button>
-
-                {this.state.hideTestLogin ? null : 
-                    <Login/>
-                }
-
-                {this.context.authenticated ? <h1>logged in</h1> : null}
             </div>
         );
     }
