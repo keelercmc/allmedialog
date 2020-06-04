@@ -1,15 +1,24 @@
-.Item {
-    border: 0.5px solid #000;
-    display: block;
-    list-style: none;
-    width: 100%;
-}
-
-.Buttons {
-    display: block;
-    text-align: right;
-}
-
-h1 {
+.Title {
     text-align: left;
+    width: 50%;
+}
+
+.Creator {
+    text-align: left;
+    width: 25%;
+}
+
+.Score {
+    text-align: left;
+    width: 3%;
+}
+
+.Year {
+    text-align: left;
+    width: 5%;
+}
+
+.Type {
+    text-align: left;
+    width: 7%;
 }

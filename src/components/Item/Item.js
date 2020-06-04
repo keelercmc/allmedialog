@@ -4,16 +4,21 @@ import classes from './Item.module.css';
 
 const item = (props) => {
     return (
-        <div>
-            <li className={classes.Item} style={{backgroundColor: props.style}}>
-                {props.index}: {props.title} by {props.creator} ({props.year}) - {props.score}/10
-                <a className={classes.Buttons}>
-                    <button onClick={() => props.toggleForm('hideUpdateForm', props.index)}>o</button>
-                    <button className={classes.Button} onClick={() => props.remove(props.extra)}>x</button>
-                </a>
-            </li>
-            {props.index === props.target ? <h1>update</h1> : null}
-        </div>
+            <tr>
+                <td className={classes.Title}>{props.title}</td>
+                <td className={classes.Creator}>{props.creator}</td>
+                <td className={classes.Score}>{props.score}</td>
+                <td className={classes.Year}>{props.year}</td>
+                <td className={classes.Type}>{props.type}</td>
+                
+                <td>
+                    <button onClick={() => props.toggleForm('hideUpdateForm', props.index)}>edit</button>
+                </td>
+                <td>
+                    <button onClick={() => props.remove(props.extra)}>remove</button>
+                </td>
+                {props.index === props.target ? <h1>update</h1> : null}
+            </tr>
     );
 }
 

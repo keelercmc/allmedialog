@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 
 import Item from '../../components/Item/Item';
+import ItemLabels from '../../components/Item/ItemLabels/ItemLabels';
 import ListEntry from '../../components/ListEntry/ListEntry';
 import Statistics from '../../components/Statistics/Statistics';
 import Login from '../Login/Login';
@@ -44,6 +45,7 @@ class List extends Component {
     }
 
     addItem = async value => {
+        value.date = new Date();
         await axios.post('https://allmedialog.firebaseio.com/' + this.state.name + '.json', value);
         this.updateList();
     }
@@ -74,8 +76,7 @@ class List extends Component {
     }
 
     sortList = filter => {
-        if (typeof filter === 'object')
-            filter = filter.target.value;
+        filter = filter.target.value;
         const sortedList = [].concat(this.state.list);
         // list is null if sortList is called from mount
 
@@ -95,14 +96,12 @@ class List extends Component {
                 item.style = this.findStyle(item.type);
             });
             const list = this.state.list.map((list) => 
-                <div>
-                    <Item 
-                        title={list.title} creator={list.creator} year={list.year} score={list.score} type={list.type}
-                        index={list.index} key={list.key} extra={list.key} style={list.style} hideForm={this.state.hideUpdateForm}
-                        target={this.state.targetIndex} remove={this.removeItem} toggleForm={this.toggleForm}/>
-                </div>
+                <Item 
+                    title={list.title} creator={list.creator} year={list.year} score={list.score} type={list.type}
+                    index={list.index} key={list.key} extra={list.key} style={list.style} target={this.state.targetIndex}
+                    remove={this.removeItem} toggleForm={this.toggleForm}/>
                 );
-            return (<div><ul>{list}</ul></div>);
+            return (<div><ul><ItemLabels/>{list}</ul></div>);
         }  
     }
 
@@ -174,7 +173,7 @@ class List extends Component {
                         <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>                  
 
                         <select className='SortSelect' onChange={this.sortList}>
-                        <option value='chronological'>Chronological</option>
+                        <option value='date'>Date Added</option>
                         <option value='title'>Title</option>
                         <option value='creator'>Creator</option>
                         <option value='year'>Year</option>
@@ -189,7 +188,6 @@ class List extends Component {
                         {this.state.hideStats ? null : 
                             <Statistics list={this.state.list}/>
                         }
-                        {console.log('elements')}
                         {this.renderList()}
                     </div>
                 }

@@ -33,11 +33,6 @@ ul {
   padding: 0 10%;
 }
 
-li {
-  font-size: 20px;
-  text-align: left;
-}
-
 select {
   border: 1px solid #ccc;
   border-radius: 10px;
