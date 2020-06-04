@@ -21,13 +21,12 @@ class List extends Component {
         hideUpdateForm: true,
         targetIndex: null,
         list: null,
-        keys: null,
         logoutTimer: 3600000
     }
 
     static contextType = AuthContext;
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         this.updateList();
         this.updateLoginStatus();
     }
@@ -49,8 +48,8 @@ class List extends Component {
         this.updateList();
     }
 
-    removeItem = async index => {
-        await axios.delete('https://allmedialog.firebaseio.com/' + this.state.name + '/' + this.state.keys[index-1] + '.json');
+    removeItem = async key => {
+        await axios.delete('https://allmedialog.firebaseio.com/' + this.state.name + '/' + key + '.json');
         this.updateList();
     }
 
@@ -64,22 +63,26 @@ class List extends Component {
             if (response.data) {
                 const keys = Object.keys(response.data)
                 const list = keys.map(key => response.data[key]);
-                this.setState({list: list, keys: keys});
+                list.forEach((item, index) => item.key = keys[index]);
+                this.setState({list: list});
                 this.renderList();
             }  
             else {
-                this.setState({list: null, keys: null});
+                this.setState({list: null});
             }
         });
     }
 
     sortList = filter => {
+        if (typeof filter === 'object')
+            filter = filter.target.value;
         const sortedList = [].concat(this.state.list);
+        // list is null if sortList is called from mount
 
-        if (filter.target.value === 'score') 
-            sortedList.sort((a, b) => a[filter.target.value] < b[filter.target.value] ? 1 : -1);
+        if (filter === 'score') 
+            sortedList.sort((a, b) => b[filter] - a[filter]);
         else 
-            sortedList.sort((a, b) => a[filter.target.value] > b[filter.target.value] ? 1 : -1);
+            sortedList.sort((a, b) => a[filter] > b[filter] ? 1 : -1);
 
         this.setState({list: sortedList});
     }
@@ -95,7 +98,7 @@ class List extends Component {
                 <div>
                     <Item 
                         title={list.title} creator={list.creator} year={list.year} score={list.score} type={list.type}
-                        index={list.index} key={list.index} style={list.style} hideForm={this.state.hideUpdateForm}
+                        index={list.index} key={list.key} extra={list.key} style={list.style} hideForm={this.state.hideUpdateForm}
                         target={this.state.targetIndex} remove={this.removeItem} toggleForm={this.toggleForm}/>
                 </div>
                 );
@@ -168,9 +171,10 @@ class List extends Component {
                     :<div>
                         <Button variant='outline-info' onClick={() => this.logout(360)}>Logout</Button>
                         <Button variant='outline-info' onClick={() => this.toggleForm('hideEntryForm')}>New</Button>
-                        <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>
+                        <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>                  
 
                         <select className='SortSelect' onChange={this.sortList}>
+                        <option value='chronological'>Chronological</option>
                         <option value='title'>Title</option>
                         <option value='creator'>Creator</option>
                         <option value='year'>Year</option>
@@ -185,7 +189,7 @@ class List extends Component {
                         {this.state.hideStats ? null : 
                             <Statistics list={this.state.list}/>
                         }
-
+                        {console.log('elements')}
                         {this.renderList()}
                     </div>
                 }

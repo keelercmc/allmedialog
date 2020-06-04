@@ -9,7 +9,7 @@ const item = (props) => {
                 {props.index}: {props.title} by {props.creator} ({props.year}) - {props.score}/10
                 <a className={classes.Buttons}>
                     <button onClick={() => props.toggleForm('hideUpdateForm', props.index)}>o</button>
-                    <button className={classes.Button} onClick={() => props.remove(props.index)}>x</button>
+                    <button className={classes.Button} onClick={() => props.remove(props.extra)}>x</button>
                 </a>
             </li>
             {props.index === props.target ? <h1>update</h1> : null}
