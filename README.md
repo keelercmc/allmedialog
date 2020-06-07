@@ -6,7 +6,6 @@
 
 ## Table of Contents 
 - [Installation](#installation)
-- [Features](#features)
 - [Technologies](#technologies)
 - [Authors](#authors)
 
@@ -45,12 +44,11 @@ $ npm run build
 $ npm eject
 ```
 
-## Features
-
 ## Technologies
 - [Axios](https://github.com/axios/axios)
 - [Firebase](https://firebase.google.com/docs)
 - [Formik](https://jaredpalmer.com/formik/docs/overview)
+- [Node.js](https://nodejs.org/en/)
 - [React.js](https://reactjs.org/docs/getting-started.html)
 - [React Bootstrap](https://react-bootstrap.github.io/getting-started/introduction)
 - [React Router](https://reacttraining.com/react-router/web/guides/quick-start)
