@@ -19,29 +19,10 @@
 $ git clone https://github.com/keelercmc/allmedialog
 ```
 
-### Setup
-```shell
-$ npm install
-```
-
 ### Run
 ```shell
+$ npm install
 $ npm start
-```
-
-### Test
-```shell
-$ npm test
-```
-
-### Run Build
-```shell
-$ npm run build
-```
-
-### Eject
-```shell
-$ npm eject
 ```
 
 ## Technologies
