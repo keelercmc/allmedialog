@@ -21,7 +21,7 @@ const itemLabels = (props) => {
                 <a onClick={() => props.sort('year')}><img className='sortButtons' src={sortIcon} alt='Sort Icon'/></a>
             </th>
             <th className={classes.Type}>Media
-                <a onClick={() => props.sort('year')}><img className='sortButtons' src={sortIcon} alt='Sort Icon'/></a>
+                <a onClick={() => props.sort('type')}><img className='sortButtons' src={sortIcon} alt='Sort Icon'/></a>
             </th>
             <th><Button variant='link' size='sm' className={classes.AlignmentButtons}>edit</Button></th>
             <th><Button variant='link' size='sm' className={classes.AlignmentButtons}>remove</Button></th>
