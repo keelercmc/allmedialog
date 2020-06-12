@@ -2,8 +2,13 @@ import React from 'react';
 
 import classes from './Item.module.css';
 
+import Button from 'react-bootstrap/Button';
+
+import ListEntry from './../ListEntry/ListEntry';
+
 const item = (props) => {
     return (
+        <div>
             <tr>
                 <td className={classes.Title}>{props.title}</td>
                 <td className={classes.Creator}>{props.creator}</td>
@@ -12,13 +17,15 @@ const item = (props) => {
                 <td className={classes.Type}>{props.type}</td>
                 
                 <td>
-                    <button onClick={() => props.toggleForm('hideUpdateForm', props.index)}>edit</button>
+                    <Button variant='link' size='sm' onClick={() => props.toggleForm('hideUpdateForm', props.index)}>edit</Button>
                 </td>
                 <td>
-                    <button onClick={() => props.remove(props.extra)}>remove</button>
+                    <Button variant='link' size='sm' onClick={() => props.remove(props.extra)}>remove</Button>
                 </td>
-                {props.index === props.target ? <h1>update</h1> : null}
+                
             </tr>
+                {props.index === props.target ? <ListEntry {...props}></ListEntry>: null}
+            </div>
     );
 }
 

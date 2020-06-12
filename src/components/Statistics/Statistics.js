@@ -46,7 +46,7 @@ const statistics = (props) => {
             }
         })
 
-        const average = (sumOfRatings / numOfRatings).toFixed(2);
+        const average = (sumOfRatings / numOfRatings).toFixed(1);
         return (average === 'Infinity' || average === 'NaN' ? 'N/A' : average);
     }
     if (props.list) {
@@ -57,7 +57,7 @@ const statistics = (props) => {
                 <p>Total books: {calculateTotalOfType('Book')}</p>
                 <p>Total games: {calculateTotalOfType('Game')}</p>
                 <p>Total movies: {calculateTotalOfType('Movie')}</p>
-                <p>Average of all entries: {calculateAverageOfType()}</p>
+                <p>Average of entries: {calculateAverageOfType()}</p>
                 <p>Average of anime: {calculateAverageOfType('Anime')}</p>
                 <p>Average of books: {calculateAverageOfType('Book')}</p>
                 <p>Average of games: {calculateAverageOfType('Game')}</p>

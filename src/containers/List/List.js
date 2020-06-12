@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 
 import axios from 'axios';
 
+import Toolbar from '../../components/Nav/Toolbar/Toolbar';
 import Item from '../../components/Item/Item';
 import ItemLabels from '../../components/Item/ItemLabels/ItemLabels';
 import ListEntry from '../../components/ListEntry/ListEntry';
@@ -22,6 +23,7 @@ class List extends Component {
         hideUpdateForm: true,
         targetIndex: null,
         list: null,
+        filters: [],
         logoutTimer: 3600000
     }
 
@@ -50,14 +52,14 @@ class List extends Component {
         this.updateList();
     }
 
-    removeItem = async key => {
-        await axios.delete('https://allmedialog.firebaseio.com/' + this.state.name + '/' + key + '.json');
+    removeItem = async index => {
+        await axios.delete('https://allmedialog.firebaseio.com/' + this.state.name + '/' + index + '.json');
         this.updateList();
     }
 
-    updateItem = async index => {
-        //get, delete, post
-        return;
+    updateItem = async (value, index) => {
+        await axios.put('https://allmedialog.firebaseio.com/' + this.state.name + '/' + index + '.json', value);
+        this.updateList();
     }
 
     updateList = async () => {
@@ -76,16 +78,22 @@ class List extends Component {
     }
 
     sortList = filter => {
-        filter = filter.target.value;
         const sortedList = [].concat(this.state.list);
-        // list is null if sortList is called from mount
+
+        if (filter.target)
+            filter = filter.target.value;
+        const filters = this.state.filters;
+        filters.push(filter);
 
         if (filter === 'score') 
             sortedList.sort((a, b) => b[filter] - a[filter]);
         else 
             sortedList.sort((a, b) => a[filter] > b[filter] ? 1 : -1);
 
-        this.setState({list: sortedList});
+        if (filters[filters.length-1] === filters[filters.length-2]) 
+            sortedList.reverse();
+            
+        this.setState({list: sortedList, filters: filters});
     }
 
     renderList = () => {
@@ -99,9 +107,9 @@ class List extends Component {
                 <Item 
                     title={list.title} creator={list.creator} year={list.year} score={list.score} type={list.type}
                     index={list.index} key={list.key} extra={list.key} style={list.style} target={this.state.targetIndex}
-                    remove={this.removeItem} toggleForm={this.toggleForm}/>
+                    add={this.addItem} submit={this.updateItem} remove={this.removeItem} toggleForm={this.toggleForm} item={list}/>
                 );
-            return (<div><ul><ItemLabels/>{list}</ul></div>);
+            return (<div><ul><ItemLabels sort={this.sortList}/>{list}</ul></div>);
         }  
     }
 
@@ -165,30 +173,25 @@ class List extends Component {
     render() {
         return (
             <div>
+                <Toolbar auth={this.state.authenticated} logout={this.logout}/>
                 {!this.state.authenticated ?
                         <Login login={this.login}/>
-                    :<div>
-                        <Button variant='outline-info' onClick={() => this.logout(360)}>Logout</Button>
-                        <Button variant='outline-info' onClick={() => this.toggleForm('hideEntryForm')}>New</Button>
-                        <Button variant='outline-info' onClick={() => this.toggleForm('hideStats')}>Statistics</Button>                  
+                    :<div> 
 
-                        <select className='SortSelect' onChange={this.sortList}>
-                        <option value='date'>Date Added</option>
-                        <option value='title'>Title</option>
-                        <option value='creator'>Creator</option>
-                        <option value='year'>Year</option>
-                        <option value='score'>Score</option>
-                        <option value='type'>Type</option>
-                        </select>
+                        {this.renderList()}
+                    
+                        <Button variant='outline-info' size='sm' onClick={() => this.toggleForm('hideEntryForm')}>New Item</Button>
+                        {this.state.list ? 
+                        <Button variant='outline-info' size='sm' onClick={() => this.toggleForm('hideStats')}>Statistics</Button> 
+                        : null}                  
 
                         {this.state.hideEntryForm ? null : 
-                            <ListEntry add={this.addItem} update={this.updateList}/>
+                            <ListEntry submit={this.addItem} update={this.updateList}/>
                         }
 
                         {this.state.hideStats ? null : 
                             <Statistics list={this.state.list}/>
                         }
-                        {this.renderList()}
                     </div>
                 }
             </div>

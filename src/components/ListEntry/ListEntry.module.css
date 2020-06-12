@@ -1,8 +1,11 @@
 .AddButton {
-    margin-bottom: 2%;
-    margin-left: 5%;
-    margin-top: 0.75%;
-    text-align: left;
+    display: block;
+    margin: 0.5% auto;
+    text-align: center;
+}
+
+.ItemForm {
+    margin-top: .5%;
 }
 
 .MediaSelect {

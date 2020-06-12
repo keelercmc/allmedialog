@@ -7,7 +7,6 @@ input {
   border-radius: 10px;
   display: block;
   padding: .5rem;
-  width: 20%;
 }
   
 input:focus {
@@ -36,7 +35,6 @@ ul {
 select {
   border: 1px solid #ccc;
   border-radius: 10px;
-  display: block;
   padding: 0.55rem 0 0.55rem 0.3rem;
   width: 20%;
 }
@@ -48,6 +46,12 @@ option:first-child {
   color: #636c72;
 }
 
-.SortSelect {
-  margin-left: 40%;
+.ItemInput {
+  display: block;
+  margin: 0 auto;
+  width: 20%;
+}
+
+.sortButtons {
+  height: 15px;
 }

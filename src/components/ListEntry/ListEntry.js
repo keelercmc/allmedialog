@@ -20,9 +20,9 @@ const errorMap = error => {
 const listEntry = (props) => {
     return (
         <Formik
-            initialValues={{ title: '', creator: '', year: '', score: '', type: ''}}
+            initialValues={{ title: props.title || '', creator: props.creator || '', year: props.year || '', score: props.score || '', type: props.type || ''}}
             onSubmit={async (values, {resetForm}) => {
-                await props.add(values);
+                await props.submit(values, props.extra);
                 props.update();
                 resetForm();
             }}
@@ -46,6 +46,7 @@ const listEntry = (props) => {
                     } = props;
                 return (
                     <form onSubmit={handleSubmit}>
+                        <div className={classes.ItemForm}>
                         <input
                             id='title'
                             placeholder='Title'
@@ -53,7 +54,7 @@ const listEntry = (props) => {
                             value={values.title}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            className={errors.title && touched.title ? 'text-input error' : 'text-input'}
+                            className={errors.title && touched.title ? 'ItemInput error' : 'ItemInput'}
                         />
                         {errors.title && touched.title && (<div className='input-feedback'>{errorMap(errors.title)}</div>)}
 
@@ -64,7 +65,7 @@ const listEntry = (props) => {
                             value={values.creator}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            className={errors.creator && touched.creator ? 'text-input error' : 'text-input'}
+                            className={errors.creator && touched.creator ? 'ItemInput error' : 'ItemInput'}
                         />
                         {errors.creator && touched.creator && (<div className='input-feedback'>{errorMap(errors.creator)}</div>)}
 
@@ -75,7 +76,7 @@ const listEntry = (props) => {
                             value={values.year}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            className={errors.year && touched.year ? 'text-input error' : 'text-input'}
+                            className={errors.year && touched.year ? 'ItemInput error' : 'ItemInput'}
                         />
                         {errors.year && touched.year && (<div className='input-feedback'>{errorMap(errors.year)}</div>)}
 
@@ -86,7 +87,7 @@ const listEntry = (props) => {
                             value={values.score}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            className={errors.score && touched.score ? 'text-input error' : 'text-input'}
+                            className={errors.score && touched.score ? 'ItemInput error' : 'ItemInput'}
                         />
                         {errors.score && touched.score && (<div className='input-feedback'>{errorMap(errors.score)}</div>)}
 
@@ -95,7 +96,7 @@ const listEntry = (props) => {
                             value={values.type}
                             onChange={(e) => {handleChange(e); e.target.style.color = '#000'}}
                             onBlur={handleBlur}
-                            className={errors.type && touched.type ? 'text-input error' : 'text-input', touched.type && !errors.type ? classes.MediaSelectTouched : classes.MediaSelect}
+                            className={errors.type && touched.type ? 'ItemInput error' : 'ItemInput', touched.type && !errors.type ? classes.MediaSelectTouched : classes.MediaSelect}
                         >
                             <option selected disabled value='' label='Select a type'/>
                             <option value='Anime' label='Anime'/>
@@ -103,10 +104,11 @@ const listEntry = (props) => {
                             <option value='Game' label='Game'/>
                             <option value='Movie' label='Movie'/>
                         </select>
+                        </div>
                         {errors.type && touched.type && (<div className='input-feedback'>{errorMap(errors.type)}</div>)}
                         <div className={classes.AddButton}>
                             <Button variant='outline-info' type='submit' disabled={isSubmitting}>
-                                Add Item
+                                Submit
                             </Button>
                         </div>
                     </form>

@@ -1,5 +1,7 @@
 import React, {Component } from 'react';
 
+import classes from './Login.module.css';
+
 import Button from 'react-bootstrap/Button';
 
 import axios from 'axios';
@@ -86,6 +88,7 @@ class Login extends Component {
                             />
                             {errors.password && touched.password && (<div className='input-feedback'>{this.errorHandler(errors.password)}</div>)}
             
+                            <div className={classes.Buttons}>
                             <Button variant='outline-info' type='submit' onClick={() => this.setURL('login')} disabled={isSubmitting}>
                                 Login
                             </Button>
@@ -93,6 +96,7 @@ class Login extends Component {
                             <Button variant='outline-info' type='submit' onClick={() => this.setURL('register')} disabled={isSubmitting}>
                                 Register
                             </Button>
+                            </div>
                         </form>
                     );
                 }}
