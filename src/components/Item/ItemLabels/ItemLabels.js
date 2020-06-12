@@ -1,7 +1,7 @@
 import React from 'react';
 
 import classes from '.././Item.module.css';
-import sortIcon from '../../../sort.svg';
+import sortIcon from '../../../assets/sort.svg';
 
 import Button from 'react-bootstrap/Button';
 
