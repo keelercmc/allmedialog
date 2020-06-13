@@ -16,3 +16,11 @@
     color: #000;
 }
 
+@media all and (max-width : 1024px) {
+    .AddButton {
+        margin: 3% auto;
+    }
+    .ItemForm {
+        margin-top: 3%;
+    }
+}

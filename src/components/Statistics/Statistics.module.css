@@ -3,3 +3,9 @@
     margin: 2% auto;
     width: 25%;
 }
+
+@media all and (max-width : 1024px) {
+    .Statistics {
+        width: 50%;
+    }
+}

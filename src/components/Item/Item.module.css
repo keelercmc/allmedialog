@@ -26,3 +26,37 @@
 .AlignmentButtons {
     visibility: hidden;
 }
+
+@media all and (max-width : 1024px) {
+    td {
+        font-size: 16px;
+    }
+    .Title {
+        display: block;
+        padding: 1%;
+        width: 100%;
+    }
+    .Creator {
+        display: block;
+        padding: 1%;
+        width: 120%;
+    }
+    .Score {
+        display: block;
+        padding: 1%;
+        width: 120%;
+    }
+    .Year {
+        display: block;
+        padding: 1%;
+        width: 120%;
+    }
+    .Type {
+        display: block;
+        padding-bottom: 10%;
+        width: 120%;
+    }
+    .ItemButtons {
+        width: 15%;
+    }
+}

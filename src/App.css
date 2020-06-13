@@ -55,3 +55,12 @@ option:first-child {
 .sortButtons {
   height: 15px;
 }
+
+@media all and (max-width : 1024px) {
+  select {
+    width: 50%;
+  }
+  .ItemInput {
+    width: 50%;
+  }
+}
