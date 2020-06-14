@@ -2,7 +2,8 @@
 
 # [All Media Log](https://master.d3h0km0hmsy4o3.amplifyapp.com/)
 > A list app to keep track of various completed books, movies, and other media
-> Add GIF here later
+
+![](https://i.imgur.com/CS6pJM8.gif)
 
 ## Table of Contents 
 - [Installation](#installation)
