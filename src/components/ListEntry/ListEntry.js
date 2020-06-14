@@ -51,6 +51,7 @@ const listEntry = (props) => {
                             id='title'
                             placeholder='Title'
                             type='text'
+                            autocomplete='off'
                             value={values.title}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -62,6 +63,7 @@ const listEntry = (props) => {
                             id='creator'
                             placeholder='Author, creator, studio'
                             type='creator'
+                            autocomplete='off'
                             value={values.creator}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -73,6 +75,7 @@ const listEntry = (props) => {
                             id='year'
                             placeholder='Year completed'
                             type='year'
+                            autocomplete='off'
                             value={values.year}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -84,6 +87,7 @@ const listEntry = (props) => {
                             id='score'
                             placeholder='Score (out of 10)'
                             type='score'
+                            autocomplete='off'
                             value={values.score}
                             onChange={handleChange}
                             onBlur={handleBlur}
